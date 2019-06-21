@@ -1,0 +1,7 @@
+*.swp
+*.osm
+*.o
+x64/
+.vs/
+videos/test.mp4
+record/

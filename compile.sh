@@ -1,0 +1,1 @@
+g++ -Ofast -std=c++14 -o traffic_sign main.cpp -I/usr/local/include/ -L/usr/local/lib/ -lboost_system -lboost_program_options -lpthread -lboost_filesystem -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_dnn -lopencv_ml -lopencv_video -lopencv_videoio -lopencv_calib3d -lopencv_features2d -lopencv_flann
