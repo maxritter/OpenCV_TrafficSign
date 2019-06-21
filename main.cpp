@@ -13,7 +13,7 @@
 using namespace cv;
 using namespace dnn;
 
-#define PROGRAM_VERSION ("1.0")
+constexpr auto program_version = ("1.0");
 
 /* Init static variables */
 Net detection::detection_net_;
@@ -34,8 +34,6 @@ void run_program(VideoCapture cap, std::unique_ptr<video_recorder>& recorder)
 	std::string input_fps_str = "Video: 0 FPS", detection_fps_str = "Inference: 0 FPS", limit_str = "Limit: - km/h";
 	std::cout << "Program started.." << std::endl;
 
-	namedWindow("German Traffic Sign AI", WINDOW_NORMAL);
-	setWindowProperty("German Traffic Sign AI", WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN);
 	while (true)
 	{
 		/* Grab frame */
@@ -73,7 +71,7 @@ void run_program(VideoCapture cap, std::unique_ptr<video_recorder>& recorder)
 		putText(display_frame, limit_str, Point(x_add, frame.size().height + 25), FONT_HERSHEY_COMPLEX_SMALL, 1, Scalar::all(0));
 		putText(display_frame, input_fps_str, Point(x_add + 220, frame.size().height + 25), FONT_HERSHEY_COMPLEX_SMALL, 1, Scalar::all(0));
 		putText(display_frame, detection_fps_str, Point(x_add + 410, frame.size().height + 25), FONT_HERSHEY_COMPLEX_SMALL, 1, Scalar::all(0));
-		imshow("German Traffic Sign AI", display_frame);
+		imshow("OpenCV Traffic Sign Recognition", display_frame);
 
 		/* Send frame to video recorder */
 		if (helper::record_video)
@@ -95,7 +93,7 @@ int main(int ac, char** av)
 	std::unique_ptr<video_recorder> recorder;
 
 	/* Parse command line options */
-	std::cout << "*** OpenCV Traffic Sign Recognition v" << PROGRAM_VERSION << " ***" << std::endl;
+	std::cout << "*** OpenCV Traffic Sign Recognition v" << program_version << " ***" << std::endl;
 	po::variables_map vm;
 	helper::parse_command_line_options(vm, ac, av);
 

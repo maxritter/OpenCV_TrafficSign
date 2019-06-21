@@ -6,7 +6,7 @@
 #include "helper.h"
 
 /* Define the relative path of the model here */
-#define CLASSIFICATION_MODEL_PATH   ("./models/classifier.pb")
+constexpr auto classification_model_path = ("./models/classifier.pb");
 
 using namespace cv;
 using namespace dnn;
@@ -22,12 +22,12 @@ public:
 
 inline bool classification::load_model()
 {
-	if (!helper::is_file_exist(CLASSIFICATION_MODEL_PATH))
+	if (!helper::is_file_exist(classification_model_path))
 	{
 		return false;
 	}
 
-	classification_net_ = readNetFromTensorflow(CLASSIFICATION_MODEL_PATH, "");
+	classification_net_ = readNetFromTensorflow(classification_model_path, "");
 	classification_net_.setPreferableBackend(DNN_BACKEND_DEFAULT);
 	classification_net_.setPreferableTarget(DNN_TARGET_CPU);
 

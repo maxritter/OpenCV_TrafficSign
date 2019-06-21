@@ -8,8 +8,8 @@
 #include "helper.h"
 
 /* Define the relative path of the model here */
-#define DETECTION_MODEL_PATH ("./models/detection.pb")
-#define DETECTION_CONFIG_PATH ("./models/detection.pbtxt")
+constexpr auto detection_model_path = ("./models/detection.pb");
+constexpr auto detection_config_path = ("./models/detection.pbtxt");
 
 using namespace cv;
 using namespace dnn;
@@ -27,12 +27,12 @@ public:
 
 inline bool detection::load_model()
 {
-	if(!helper::is_file_exist(DETECTION_MODEL_PATH) || !helper::is_file_exist(DETECTION_CONFIG_PATH))
+	if(!helper::is_file_exist(detection_model_path) || !helper::is_file_exist(detection_config_path))
 	{
 		return false;
 	}
 
-	detection_net_ = readNetFromTensorflow(DETECTION_MODEL_PATH, DETECTION_CONFIG_PATH);
+	detection_net_ = readNetFromTensorflow(detection_model_path, detection_config_path);
 	detection_net_.setPreferableBackend(DNN_BACKEND_DEFAULT);
 	detection_net_.setPreferableTarget(DNN_TARGET_CPU);
 	out_names_ = detection_net_.getUnconnectedOutLayersNames();
