@@ -14,6 +14,9 @@ using namespace dnn;
 class classification
 {
 	static Net classification_net_;
+	constexpr static float sign_classify_thresh = 0.99f;
+	constexpr static float sign_scale_input = 0.003921f; // Normalize to 1/255
+	static const int sign_res_input_px = 32;
 
 public:
 	static bool load_model();
@@ -39,8 +42,8 @@ inline void classification::classify_sign(const Mat& sign_classify, Mat& sign_im
 	/* Downsize image to helper::sign_res_input_px and make it grayscale */
 	Mat blob;
 	cvtColor(sign_classify, blob, COLOR_BGR2GRAY);
-	resize(blob, blob, Size(helper::sign_res_input_px, helper::sign_res_input_px));
-	blobFromImage(blob, blob, helper::sign_scale_input, Size(helper::sign_res_input_px, helper::sign_res_input_px), 
+	resize(blob, blob, Size(sign_res_input_px, sign_res_input_px));
+	blobFromImage(blob, blob, sign_scale_input, Size(sign_res_input_px, sign_res_input_px), 
 		Scalar(), false, false);
 
 	classification_net_.setInput(blob);
@@ -51,7 +54,7 @@ inline void classification::classify_sign(const Mat& sign_classify, Mat& sign_im
 	minMaxLoc(prob.reshape(1, 1), nullptr, &confidence, nullptr, &class_id_point);
 	int class_id = class_id_point.x;
 
-	if ((confidence >= helper::sign_threshold) && (class_id >= 0) && (class_id < 9))
+	if ((confidence >= sign_classify_thresh) && (class_id >= 0) && (class_id < 9))
 	{
 		limit_str = helper::get_limit_string(class_id);
 		sign_img = sign_classify;

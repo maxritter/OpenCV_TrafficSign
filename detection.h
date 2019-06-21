@@ -18,6 +18,11 @@ class detection
 {
 	static Net detection_net_;
 	static std::vector<String> out_names_;
+	constexpr static float sign_detect_thresh = 0.90f;
+	constexpr static float sign_extend_px = 0.008f;
+	static const int target_class_id = 0;
+	static const int detection_input_width = 300;
+	static const int detection_input_height = 300;
 
 public:
 	static bool load_model();
@@ -51,7 +56,7 @@ inline bool detection::find_sign(Mat& frame, const std::vector<Mat>& outs, Mat& 
 			const int class_id = static_cast<int>(data[i + 1]) - 1;
 
 			/* Check if threshold and target class matches */
-			if ((confidence > helper::sign_threshold) && (class_id == helper::target_class_id))
+			if ((confidence > sign_detect_thresh) && (class_id == target_class_id))
 			{
 				const float left = data[i + 3];
 				const float top = data[i + 4];
@@ -61,10 +66,10 @@ inline bool detection::find_sign(Mat& frame, const std::vector<Mat>& outs, Mat& 
 				const int im_width = frame.size().width;
 				const int im_height = frame.size().height;
 
-				const auto box_left = static_cast<int>(std::max(int((left - helper::sign_extend_px) * im_width), 0));
-				const auto box_top = static_cast<int>(std::max(int((top - helper::sign_extend_px) * im_height), 0));
-				const auto box_right = static_cast<int>(std::min(int((right + helper::sign_extend_px) * im_width), im_width - 1));
-				const auto box_bottom = static_cast<int>(std::min(int((bottom + helper::sign_extend_px) * im_height), im_height - 1));
+				const auto box_left = static_cast<int>(std::max(int((left - sign_extend_px) * im_width), 0));
+				const auto box_top = static_cast<int>(std::max(int((top - sign_extend_px) * im_height), 0));
+				const auto box_right = static_cast<int>(std::min(int((right + sign_extend_px) * im_width), im_width - 1));
+				const auto box_bottom = static_cast<int>(std::min(int((bottom + sign_extend_px) * im_height), im_height - 1));
 
 				/* Cut out the sign and resize it */
 				sign_img = frame(Rect(box_left, box_top, abs(box_right - box_left), abs(box_bottom - box_top))).clone();
@@ -97,8 +102,8 @@ inline void detection::processing_thread()
 		/* Run the inference */
 		if (!frame.empty())
 		{
-			blobFromImage(frame, blob, 1.0, Size(helper::detection_input_width, 
-				helper::detection_input_height), Scalar(), true);
+			blobFromImage(frame, blob, 1.0, Size(detection_input_width, 
+				detection_input_height), Scalar(), true);
 			detection_net_.setInput(blob);
 
 			std::vector<Mat> outs;

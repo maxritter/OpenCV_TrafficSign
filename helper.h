@@ -7,19 +7,16 @@
 using namespace cv;
 namespace po = boost::program_options;
 
+/* Change your camera ID here */
+constexpr auto camera_id = 0;
+
 class helper
 {
 public:
 	static bool use_video;
 	static bool record_video;
-	static const int sign_res_input_px = 32;
+	
 	static const int sign_res_display_width = 128;
-	constexpr static float sign_scale_input = 0.003921f; // Normalize to 1/255
-	constexpr static float sign_extend_px = 0.008f;
-	constexpr static float sign_threshold = 0.99f;
-	static const int target_class_id = 0;
-	static const int detection_input_width = 300;
-	static const int detection_input_height = 300;
 	constexpr static float input_height = 440.0f;
 	constexpr static float window_width = 800.0f;
 	constexpr static float window_height = 480.0f;
@@ -76,7 +73,7 @@ inline bool helper::open_input_source(VideoCapture& cap, const std::string& inpu
 		/* Open Webcam */
 		if (input_src.empty())
 		{
-			cap.open(0);
+			cap.open(camera_id);
 			record_fps = int(cap.get(CAP_PROP_FPS));
 			int cam_width = int(cap.get(CAP_PROP_FRAME_WIDTH));
 			int cam_height = int(cap.get(CAP_PROP_FRAME_HEIGHT));
