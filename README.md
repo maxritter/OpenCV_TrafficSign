@@ -34,6 +34,7 @@ chmod +x compile.sh
 ./compile.sh
 ```
 
+On Windows, you can also use the Visual Studio project to compile it.
 
 **Usage:**
 
@@ -50,4 +51,37 @@ If you want to use your webcam, run the program without any additional parameter
 ```
 ./traffic_sign
 ```
+
+
+
+**Rubric Criteria:**
+
+- Loops, Functions, I/O
+  - The project demonstrates an understanding of C++ functions and control structures.
+    - Used in the whole project
+  - The project reads data from a file and process the data, or the program writes data to a file.
+    - Reads video from file (helper::open_input_source in helper.h) or records video to file (video_recorder::_run in video_recorder.h)
+  - The project accepts user input and processes the input.
+    - Boost is used to parse command line arguments (main in main.cpp)
+- Object Oriented Programming
+  - The project uses Object Oriented Programming techniques.
+    - Used in the whole project
+  - Classes use appropriate access specifiers for class members.
+    - Variables are declared as private whenever possible
+  - Classes abstract implementation details from their interfaces.
+    - Appropriate names are chosen and implementation details are hidden
+  - Templates generalize functions in the project.
+    - safe_queue is a template class
+  - Classes encapsulate behavior.
+    - Different classes are implemented (classificaton, detection, helper, safe_queue, video_recorder)
+- Memory Management
+  - The project makes use of references in function declarations.
+    - For example detection::find_sign in detection.h
+  - The project uses smart pointers instead of raw pointers.
+    - Line 136 in main.cpp
+- Concurrency
+  - The project uses multithreading.
+    - detection and video_recorder thread are implemented in a separate thread
+  - A mutex or lock is used in the project.
+    - safe_queue uses a lock_guard
 
